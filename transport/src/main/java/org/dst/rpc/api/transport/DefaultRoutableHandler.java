@@ -54,6 +54,20 @@ public class DefaultRoutableHandler implements RoutableHandler {
 
   @Override
   public Object handle(Endpoint endpoint, Object message) {
-    return null;
+    String serverName = endpoint.getUrl().getPath();
+    return handlerMap.getOrDefault(serverName, new DefaultHandler()).handle(endpoint, message);
+  }
+
+  public static class DefaultHandler implements Handler {
+
+    @Override
+    public String getServerName() {
+      return null;
+    }
+
+    @Override
+    public Object handle(Endpoint endpoint, Object message) {
+      throw new UnsupportedOperationException();
+    }
   }
 }
