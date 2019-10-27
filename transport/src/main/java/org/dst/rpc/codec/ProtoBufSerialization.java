@@ -1,7 +1,6 @@
 package org.dst.rpc.codec;
 
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.GeneratedMessageV3.Builder;
+import com.google.protobuf.GeneratedMessage.Builder;
 import com.google.protobuf.Message;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -26,10 +25,10 @@ public class ProtoBufSerialization implements Serialization {
   @Override
   @SuppressWarnings("unchecked")
   public <T> T deserialize(byte[] bytes, Class<T> clazz) throws IOException {
-    GeneratedMessageV3.Builder builder;
+    Builder builder;
     try {
       Method method = clazz.getMethod("newBuilder");
-      builder = (GeneratedMessageV3.Builder) method.invoke(null, null);
+      builder = (Builder) method.invoke(null, null);
     } catch (Exception e) {
       throw new IllegalArgumentException("Get google protobuf message builder from " + clazz.getName() + "failed", e);
     }
