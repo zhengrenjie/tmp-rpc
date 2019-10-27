@@ -35,3 +35,6 @@ rpc/src/main/java/org/dst/rpc/protobuf/generated/*
 
 # build
 build/
+
+# macOS
+.DS_Store
