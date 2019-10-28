@@ -4,9 +4,7 @@ import org.dst.rpc.Invoker;
 import org.dst.rpc.core.URL;
 import java.lang.reflect.Proxy;
 
-/**
- * @author zrj CreateDate: 2019/9/4
- */
+
 public class ProxyFactory<T> {
 
   @SuppressWarnings("unchecked")

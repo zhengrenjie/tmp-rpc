@@ -10,9 +10,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 
-/**
- * @author zrj CreateDate: 2019/9/4
- */
 public class Reference<T> implements InvocationHandler {
 
   private URL url;
