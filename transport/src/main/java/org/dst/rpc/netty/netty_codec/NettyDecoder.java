@@ -40,7 +40,7 @@ public class NettyDecoder extends ByteToMessageDecoder {
       return;
     }
 
-    // 全部读取
+    // 全部读取 注意长度，千万不要把后面的包中的数据给读取了，否则后面的包的数据将不完整。
     in.resetReaderIndex();
     byte[] data = new byte[CodecConstants.HEADER_SIZE + contentLength];
     in.readBytes(data);
