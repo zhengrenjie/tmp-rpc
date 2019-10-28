@@ -78,6 +78,10 @@ public class URL {
   }
 
   private void getHostPostFromAddress(String address) {
+    setAddress(address);
+  }
+
+  public void setAddress(String address) {
     if(address == null || address.length() == 0 || !address.contains(":")) {
       throw new IllegalArgumentException("URL: address error: " + address);
     }

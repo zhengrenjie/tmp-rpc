@@ -10,7 +10,7 @@ public class ProxyFactory<T> {
   @SuppressWarnings("unchecked")
   public T getProxy(Class<T> clazz, URL url, Invoker invoker) {
     return (T) Proxy.newProxyInstance(
-        clazz.getClassLoader(), new Class[]{clazz}, new Reference(clazz, url, invoker));
+        clazz.getClassLoader(), new Class[]{clazz}, new ProxyHandler(clazz, url, invoker));
   }
 
 }

@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 
-public class Reference<T> implements InvocationHandler {
+public class ProxyHandler<T> implements InvocationHandler {
 
   private URL url;
 
@@ -18,7 +18,7 @@ public class Reference<T> implements InvocationHandler {
 
   private Class<T> interfaceClazz;
 
-  public Reference(Class<T> clazz, URL url, Invoker invoker) {
+  public ProxyHandler(Class<T> clazz, URL url, Invoker invoker) {
     interfaceClazz = clazz;
     this.url = url;
     this.invoker = invoker;
