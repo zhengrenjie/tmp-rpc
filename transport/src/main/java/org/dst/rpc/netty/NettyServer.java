@@ -7,6 +7,7 @@ import org.dst.rpc.api.transport.AbstractServer;
 import org.dst.rpc.api.transport.Channel;
 import org.dst.rpc.api.transport.Handler;
 import org.dst.rpc.codec.Codec;
+import org.dst.rpc.codec.FastJsonSerialization;
 import org.dst.rpc.core.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.netty.netty_codec.NettyDecoder;
@@ -95,7 +96,7 @@ public class NettyServer extends AbstractServer {
 
       }
     };
-    Codec codec = new DstCodec();
+    Codec codec = new DstCodec(new FastJsonSerialization());
     channel.setCodec(codec);
     return channel;
   }
@@ -119,15 +120,8 @@ public class NettyServer extends AbstractServer {
     }
 
     private void processRequest(ChannelHandlerContext ctx, Request msg) {
-      Object result = handler.handle(NettyServer.this, msg);
-      Response response = new Response();
+      Response response = (Response)handler.handle(NettyServer.this, msg);
       response.setRequestId(msg.getRequestId());
-
-      if(result instanceof Exception) {
-        response.setException((Exception) result);
-      } else {
-        response.setReturnValue(result);
-      }
       sendResponse(ctx, response);
     }
 

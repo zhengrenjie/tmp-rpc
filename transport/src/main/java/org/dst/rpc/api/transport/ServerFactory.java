@@ -1,6 +1,5 @@
 package org.dst.rpc.api.transport;
 
-import org.dst.rpc.codec.Codec;
 import org.dst.rpc.core.URL;
 import org.dst.rpc.exception.TransportException;
 import org.dst.rpc.model.IpPortPair;
@@ -19,7 +18,7 @@ abstract public class ServerFactory {
   /**
    * 创建一个新的Server，如果server对应的ip&port已经存在，直接从缓存中拿取可用的Server。
    */
-  public Server createServer(URL url, Handler handler, Codec codec) {
+  public Server createServer(URL url, Handler handler) {
     IpPortPair serverAddress = url.getIpPortPair();
     Server server;
     if (activeServer.containsKey(serverAddress)) {
@@ -27,7 +26,6 @@ abstract public class ServerFactory {
       if (server.isConnected()) {
         RoutableHandler routableHandler = server.getRoutableHandler();
         if (routableHandler == null) {
-          // todo throw exception
           throw new TransportException("Server's routableHandler can't be null");
         }
         if (handler instanceof RoutableHandler) {

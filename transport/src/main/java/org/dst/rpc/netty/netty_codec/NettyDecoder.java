@@ -1,5 +1,6 @@
 package org.dst.rpc.netty.netty_codec;
 
+import java.nio.charset.Charset;
 import org.dst.rpc.common.constants.CodecConstants;
 import org.dst.rpc.exception.TransportException;
 import io.netty.buffer.ByteBuf;
@@ -26,7 +27,10 @@ public class NettyDecoder extends ByteToMessageDecoder {
     short magic = in.readShort();
     if(magic != CodecConstants.MAGIC_HEAD) {
       in.resetReaderIndex();
-      throw new TransportException("NettyDecoder: magic number error: " + magic);
+      String str = in.toString(Charset.defaultCharset());
+      System.out.println(str);
+      return;
+//      throw new TransportException("NettyDecoder: magic number error: " + magic);
     }
 
     in.skipBytes(2);

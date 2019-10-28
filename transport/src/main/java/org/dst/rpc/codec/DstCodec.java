@@ -28,14 +28,14 @@ import org.dst.rpc.utils.ReflectUtils;
  * |               request id     64 bit                  |
  * |               content ...                            |
  *
- *
+ * todo: content length 放到后面
  */
 public class DstCodec implements Codec {
 
   private Serialization serialization;
 
-  public DstCodec() {
-    this.serialization = new ProtoBufSerialization();
+  public DstCodec(Serialization serialization) {
+    this.serialization = serialization;
   }
 
   @Override
@@ -102,7 +102,10 @@ public class DstCodec implements Codec {
 
     output.writeUTF(request.getInterfaceName());
     output.writeUTF(request.getMethodName());
+
+//    if(request.getArgsType() != null && !"".equals(request.getArgsType())) {
     output.writeUTF(request.getArgsType());
+//    }
 
     if (request.getArgsValue() != null && request.getArgsValue().length > 0) {
       for (Object obj : request.getArgsValue()) {
@@ -189,7 +192,7 @@ public class DstCodec implements Codec {
     Response response = new Response();
 
     String className = input.readUTF();
-    Class<?> clz = ReflectUtil.forName(className);
+    Class<?> clz = ReflectUtils.forName(className);
     Object result = serialization.deserialize((byte[]) input.readObject(), clz);
 
     response.setRequestId(requestId);

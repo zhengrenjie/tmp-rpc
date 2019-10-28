@@ -10,6 +10,7 @@ import org.dst.rpc.api.transport.Channel;
 import org.dst.rpc.api.transport.Endpoint;
 import org.dst.rpc.api.transport.Handler;
 import org.dst.rpc.codec.Codec;
+import org.dst.rpc.codec.FastJsonSerialization;
 import org.dst.rpc.core.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.exception.TransportException;
@@ -136,7 +137,8 @@ public class NettyClient extends AbstractClient {
         future.onSuccess(response);
       }
     };
-    Codec codec = new DstCodec();
+
+    Codec codec = new DstCodec(new FastJsonSerialization());
     channel.setCodec(codec);
     return channel;
   }

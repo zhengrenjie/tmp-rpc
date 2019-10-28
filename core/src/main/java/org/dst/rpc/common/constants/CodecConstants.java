@@ -7,7 +7,7 @@ public interface CodecConstants {
 
   short MAGIC_HEAD = 9527;
 
-  int HEADER_LENGTH = 8 * 16;
+  int HEADER_LENGTH = 16/* bytes, not bits */;
 
   int HEADER_SIZE = 16;
 

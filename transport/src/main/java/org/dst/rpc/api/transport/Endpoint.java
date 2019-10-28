@@ -25,7 +25,7 @@ public interface Endpoint {
    * 建立连接
    * @return 建立连接之后的信道。
    */
-  void connect();
+  void init();
 
   /**
    * 打开建立的通信信道
@@ -36,6 +36,6 @@ public interface Endpoint {
   /**
    * 断开连接
    */
-  void disconnect();
+  void destroy();
 
 }

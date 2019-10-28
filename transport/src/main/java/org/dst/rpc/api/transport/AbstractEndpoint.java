@@ -40,7 +40,7 @@ abstract public class AbstractEndpoint implements Endpoint {
   }
 
   @Override
-  public void connect() {
+  public void init() {
     status = CONNECTED;
     try {
       channel = createChannel();
@@ -65,9 +65,10 @@ abstract public class AbstractEndpoint implements Endpoint {
   }
 
   @Override
-  public void disconnect() {
+  public void destroy() {
     status = DISCONNECTED;
     channel.close();
+    channel = null;
   }
 
   abstract protected Channel createChannel();
