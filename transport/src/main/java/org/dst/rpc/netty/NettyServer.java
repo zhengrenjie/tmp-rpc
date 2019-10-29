@@ -44,6 +44,10 @@ public class NettyServer extends AbstractServer {
     workerGroup = new NioEventLoopGroup();
   }
 
+
+  /**
+   * fixme Endpoint 和 Channel 是一对多的关系。
+   */
   @Override
   protected Channel createChannel() {
     Channel channel = new AbstractChannel() {
