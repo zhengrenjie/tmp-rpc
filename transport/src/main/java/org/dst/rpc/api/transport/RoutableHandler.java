@@ -21,7 +21,7 @@ public interface RoutableHandler extends Handler {
   List<Handler> getAllHandler();
 
   @Override
-  Object handle(Endpoint endpoint, Object message);
+  Object handle(Object message);
 
   @Override
   default String getServerName() {throw new UnsupportedOperationException(); }

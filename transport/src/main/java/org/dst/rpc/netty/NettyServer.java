@@ -47,6 +47,7 @@ public class NettyServer extends AbstractServer {
 
   /**
    * fixme Endpoint 和 Channel 是一对多的关系。
+   * fixme Channel这个设计 目前好像没有什么用
    */
   @Override
   protected Channel createChannel() {
@@ -136,20 +137,9 @@ public class NettyServer extends AbstractServer {
 
     private void processRequest(ChannelHandlerContext ctx, Request msg) {
       // 如果方法中含有channel参数的话，自动注入
-//      Channel channel = getChannel();
-//      String channelClassName = Channel.class.getName();
-//      if (channel != null && msg.getArgsType() != null && !"".equals(msg.getArgsType())) {
-//        String[] args = msg.getArgsType().split(",");
-//        for (int i = 0; i < args.length; i++) {
-//          if (args[i].equals(channelClassName)) {
-//            msg.getArgsValue()[i] = channel;
-//          }
-//        }
-//      }
-      Response response = (Response) handler.handle(NettyServer.this, msg);
+      Response response = (Response) handler.handle(msg);
       response.setRequestId(msg.getRequestId());
       sendResponse(ctx, response);
-//      getChannel().send(response);
     }
 
     private ChannelFuture sendResponse(ChannelHandlerContext ctx, Response response) {

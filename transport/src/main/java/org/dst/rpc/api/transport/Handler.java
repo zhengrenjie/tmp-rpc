@@ -15,6 +15,6 @@ public interface Handler {
   /**
    * 处理接口
    */
-  Object handle(Endpoint endpoint, Object message);
+  Object handle(Object message);
 
 }

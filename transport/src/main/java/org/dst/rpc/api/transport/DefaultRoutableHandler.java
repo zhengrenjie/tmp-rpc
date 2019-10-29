@@ -1,5 +1,6 @@
 package org.dst.rpc.api.transport;
 
+import org.dst.rpc.api.async.Request;
 import org.dst.rpc.core.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +52,9 @@ public class DefaultRoutableHandler implements RoutableHandler {
   }
 
   @Override
-  public Object handle(Endpoint endpoint, Object message) {
-    String serverName = endpoint.getUrl().getPath();
-    return handlerMap.getOrDefault(serverName, new DefaultHandler()).handle(endpoint, message);
+  public Object handle(Object message) {
+    String serverName = ((Request) message).getInterfaceName();
+    return handlerMap.getOrDefault(serverName, new DefaultHandler()).handle(message);
   }
 
   public static class DefaultHandler implements Handler {
@@ -64,7 +65,7 @@ public class DefaultRoutableHandler implements RoutableHandler {
     }
 
     @Override
-    public Object handle(Endpoint endpoint, Object message) {
+    public Object handle(Object message) {
       throw new UnsupportedOperationException();
     }
   }

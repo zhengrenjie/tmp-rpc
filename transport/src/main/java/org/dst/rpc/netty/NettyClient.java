@@ -1,6 +1,5 @@
 package org.dst.rpc.netty;
 
-import java.io.IOException;
 import org.dst.rpc.api.async.AsyncResponse;
 import org.dst.rpc.api.async.DefaultAsyncResponse;
 import org.dst.rpc.api.async.DefaultResponse;
@@ -9,7 +8,6 @@ import org.dst.rpc.api.async.Request;
 import org.dst.rpc.api.transport.AbstractChannel;
 import org.dst.rpc.api.transport.AbstractClient;
 import org.dst.rpc.api.transport.Channel;
-import org.dst.rpc.api.transport.Endpoint;
 import org.dst.rpc.api.transport.Handler;
 import org.dst.rpc.codec.Codec;
 import org.dst.rpc.codec.FastJsonSerialization;
@@ -79,7 +77,7 @@ public class NettyClient extends AbstractClient {
                       }
 
                       @Override
-                      public Object handle(Endpoint endpoint, Object message) {
+                      public Object handle(Object message) {
                         receive(message);
                         return null;
                       }
@@ -195,7 +193,7 @@ public class NettyClient extends AbstractClient {
     }
 
     private void processResponse(ChannelHandlerContext ctx, Response msg) {
-      handler.handle(NettyClient.this, msg);
+      handler.handle(msg);
     }
   }
 }
