@@ -3,7 +3,6 @@ package org.dst.rpc;
 import org.dst.rpc.api.transport.Client;
 import org.dst.rpc.config.ParamConstants;
 import org.dst.rpc.core.URL;
-import org.dst.rpc.example.IServer;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.netty.NettyClient;
 import org.dst.rpc.proxy.ProxyFactory;

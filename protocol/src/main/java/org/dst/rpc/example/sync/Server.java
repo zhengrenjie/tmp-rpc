@@ -1,4 +1,4 @@
-package org.dst.rpc.example;
+package org.dst.rpc.example.sync;
 
 import org.dst.rpc.Exporter;
 

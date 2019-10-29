@@ -1,4 +1,4 @@
-package org.dst.rpc.example;
+package org.dst.rpc.example.sync;
 
 /**
  * @author zrj CreateDate: 2019/10/28

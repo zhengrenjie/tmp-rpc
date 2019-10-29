@@ -1,4 +1,8 @@
-package org.dst.rpc.api.remote;
+package org.dst.rpc.api.async;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -14,6 +18,8 @@ public class Request {
   private String argsType;
 
   private Object[] argsValue;
+
+  private Map<String, Object> attributes = new HashMap<>();
 
   public long getRequestId() {
     return requestId;
@@ -53,5 +59,25 @@ public class Request {
 
   public void setArgsValue(Object[] argsValue) {
     this.argsValue = argsValue;
+  }
+
+  public boolean hasAttribute(String key) {
+    return attributes.containsKey(key);
+  }
+
+  public Object getAttribute(String key) {
+    return attributes.get(key);
+  }
+
+  public void setAttribute(String key, Object value) {
+    if (value == null) {
+      attributes.remove(key);
+    } else {
+      attributes.put(key, value);
+    }
+  }
+
+  public void removeAttribute(String key) {
+    attributes.remove(key);
   }
 }

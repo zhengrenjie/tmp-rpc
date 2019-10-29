@@ -1,6 +1,8 @@
 package org.dst.rpc.api.transport;
 
-import org.dst.rpc.api.remote.ResponseFuture;
+import org.dst.rpc.api.async.AsyncResponse;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.config.ParamConstants;
 import org.dst.rpc.core.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,18 +14,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 abstract public class AbstractClient extends AbstractEndpoint implements Client {
 
-  private Map<Long, ResponseFuture> currentTask = new ConcurrentHashMap<>();
+  private Map<Long, Response> currentTask = new ConcurrentHashMap<>();
 
   public AbstractClient(URL serverUrl) {
     super(serverUrl);
   }
 
-  protected ResponseFuture getResponseFuture(long requestId) {
+  protected Response getResponseFuture(long requestId) {
     return currentTask.remove(requestId);
   }
 
-  protected void addCurrentTask(long requestId, ResponseFuture responseFuture) {
-    currentTask.putIfAbsent(requestId, responseFuture);
+  protected void addCurrentTask(long requestId, Response response) {
+    currentTask.putIfAbsent(requestId, response);
   }
 
+  @Override
+  public boolean isAsync() {
+    return getUrl().getBoolean(ParamConstants.isAsync, true);
+  }
 }

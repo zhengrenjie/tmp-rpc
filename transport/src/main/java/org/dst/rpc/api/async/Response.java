@@ -1,33 +1,22 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api.async;
 
-import java.io.IOException;
-import org.dst.rpc.codec.Codec;
 
 /**
- * 一个链接，或者说一个可通信的信道
+ * @author zrj CreateDate: 2019/10/29
  */
-public interface Channel {
+public interface Response {
 
-  /**
-   * 检查一个信道是否打开。
-   */
-  boolean isOpen();
+  long getRequestId();
 
-  void open();
+  void setRequestId(long requestId);
 
-  void close();
+  Object getValue();
 
+  void setValue(Object value);
 
-  void send(Object message);
+  Exception getException();
 
-  void receive(Object message);
-
-  /**
-   * 该信道上的编解码器
-   */
-  Codec getCodec();
-
-  void setCodec(Codec codec);
+  void setException(Exception e);
 
   /**
    * has attribute.

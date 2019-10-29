@@ -1,7 +1,8 @@
 package org.dst.rpc.netty;
 
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
+import java.io.IOException;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.api.async.Request;
 import org.dst.rpc.api.transport.AbstractChannel;
 import org.dst.rpc.api.transport.AbstractServer;
 import org.dst.rpc.api.transport.Channel;
@@ -36,7 +37,7 @@ public class NettyServer extends AbstractServer {
   private NioEventLoopGroup workerGroup;
 
 
-  public NettyServer( URL url, Handler handler) {
+  public NettyServer(URL url, Handler handler) {
     super(url);
     getRoutableHandler().registerHandler(handler);
     bossGroup = new NioEventLoopGroup(1);
@@ -86,15 +87,20 @@ public class NettyServer extends AbstractServer {
         }
       }
 
+      /**
+       * 这里千万不要使用serverChannel.write，serverChannel是父channel，用来接收accept事件的，
+       * 真正的worker channel不再这里。
+       */
       @Override
       public void send(Object message) {
-
+        throw new UnsupportedOperationException();
       }
 
       @Override
       public void receive(Object message) {
-
+        throw new UnsupportedOperationException();
       }
+
     };
     Codec codec = new DstCodec(new FastJsonSerialization());
     channel.setCodec(codec);
@@ -114,15 +120,32 @@ public class NettyServer extends AbstractServer {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
       Object object = getChannel().getCodec().decode((byte[]) msg);
       if (!(object instanceof Request)) {
-        throw new DstException("ServerChannelHandler: unsupported message type when decode: " + object.getClass());
+        throw new DstException(
+            "ServerChannelHandler: unsupported message type when decode: " + object.getClass());
       }
-      processRequest(ctx, (Request) object);
+      if (getExecutor() != null) {
+        getExecutor().execute(() -> processRequest(ctx, (Request) object));
+      } else {
+        processRequest(ctx, (Request) object);
+      }
     }
 
     private void processRequest(ChannelHandlerContext ctx, Request msg) {
-      Response response = (Response)handler.handle(NettyServer.this, msg);
+      // 如果方法中含有channel参数的话，自动注入
+//      Channel channel = getChannel();
+//      String channelClassName = Channel.class.getName();
+//      if (channel != null && msg.getArgsType() != null && !"".equals(msg.getArgsType())) {
+//        String[] args = msg.getArgsType().split(",");
+//        for (int i = 0; i < args.length; i++) {
+//          if (args[i].equals(channelClassName)) {
+//            msg.getArgsValue()[i] = channel;
+//          }
+//        }
+//      }
+      Response response = (Response) handler.handle(NettyServer.this, msg);
       response.setRequestId(msg.getRequestId());
       sendResponse(ctx, response);
+//      getChannel().send(response);
     }
 
     private ChannelFuture sendResponse(ChannelHandlerContext ctx, Response response) {
@@ -130,7 +153,6 @@ public class NettyServer extends AbstractServer {
       if (ctx.channel().isActive()) {
         return ctx.channel().writeAndFlush(msg);
       }
-
       return null;
     }
   }

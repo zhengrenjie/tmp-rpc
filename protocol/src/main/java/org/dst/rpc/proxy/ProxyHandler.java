@@ -1,8 +1,10 @@
 package org.dst.rpc.proxy;
 
 import org.dst.rpc.Invoker;
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
+import org.dst.rpc.api.async.AsyncResponse;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.api.async.Request;
+import org.dst.rpc.api.transport.Channel;
 import org.dst.rpc.core.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.utils.RequestIdGenerator;
@@ -40,26 +42,41 @@ public class ProxyHandler<T> implements InvocationHandler {
     request.setRequestId(RequestIdGenerator.next());
     request.setInterfaceName(method.getDeclaringClass().getName());
     request.setMethodName(method.getName());
-    request.setArgsType(getArgsTypeString(args));
+    request.setArgsType(getArgsTypeString(method));
     request.setArgsValue(args);
-    Response response = invoker.invoke(request);
 
-    if(response.getException() != null) {
+    Response response = invoker.invoke(request);
+    /*
+       fixme 这里为了让业务方使用异步，这里将Response返回给调用方了。
+       这里我觉得更好的方法是返回一个JDK的Future，比较通用，不然rpc框架对业务方有侵入了。
+     */
+    if (response instanceof AsyncResponse) {
+      if (Response.class.isAssignableFrom(method.getReturnType())) {
+        // fixme 这里不要直接返回Response，应该返回一个门面，不然的话没有将框架内的东西封装住。
+        return response;
+      } else {
+        throw new DstException("Method return type must extend from AsyncResponse");
+      }
+    }
+
+    // 如果不是异步的，直接同步返回结果。
+    if (response.getException() != null) {
       throw response.getException();
     }
 
-    return response.getReturnValue();
+    return response.getValue();
   }
 
-  private String getArgsTypeString(Object[] args) {
-    if(args == null || args.length <= 0) {
+  private String getArgsTypeString(Method method) {
+    Class<?>[] pts = method.getParameterTypes();
+    if (pts.length <= 0) {
       return "";
     }
     StringBuilder sb = new StringBuilder();
-    for(Object object : args) {
-      sb.append(object.getClass().getName()).append(",");
+    for (Class clazz : pts) {
+      sb.append(clazz.getName()).append(",");
     }
-    if(sb.length() > 0) {
+    if (sb.length() > 0) {
       sb.setLength(sb.length() - ",".length());
     }
     return sb.toString();
@@ -67,14 +84,12 @@ public class ProxyHandler<T> implements InvocationHandler {
 
   /**
    * tostring,equals,hashCode,finalize等接口未声明的方法不进行远程调用
-   *
-   * @param method
-   * @return
    */
   public boolean isLocalMethod(Method method) {
     if (method.getDeclaringClass().equals(Object.class)) {
       try {
-        Method interfaceMethod = interfaceClazz.getDeclaredMethod(method.getName(), method.getParameterTypes());
+        Method interfaceMethod = interfaceClazz
+            .getDeclaredMethod(method.getName(), method.getParameterTypes());
         return false;
       } catch (Exception e) {
         return true;

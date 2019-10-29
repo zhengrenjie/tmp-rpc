@@ -5,12 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 一个可以通信的终端，需要有自己的编解码器：Codec。
- *
- * 需要有自己的设置：RemoteConfig
- *
- * 需要保存自己的状态：CHANNEL_STATUS
- *
  *
  */
 abstract public class AbstractEndpoint implements Endpoint {

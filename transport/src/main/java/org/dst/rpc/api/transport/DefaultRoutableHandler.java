@@ -14,7 +14,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DefaultRoutableHandler implements RoutableHandler {
 
   private Map<String, Handler> handlerMap;
-  private Lock lock;
 
   @Override
   public List<Handler> getAllHandler() {
@@ -23,7 +22,6 @@ public class DefaultRoutableHandler implements RoutableHandler {
 
   public DefaultRoutableHandler() {
     handlerMap = new ConcurrentHashMap<>();
-    lock = new ReentrantLock();
   }
 
   @Override

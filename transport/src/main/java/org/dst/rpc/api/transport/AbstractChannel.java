@@ -1,5 +1,7 @@
 package org.dst.rpc.api.transport;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import org.dst.rpc.codec.Codec;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,6 +18,7 @@ abstract public class AbstractChannel implements Channel {
   private Codec codec;
   private int status = NEW;
   private Map<String, Object> attributes;
+
 
   public AbstractChannel() {
     attributes = new ConcurrentHashMap<>();

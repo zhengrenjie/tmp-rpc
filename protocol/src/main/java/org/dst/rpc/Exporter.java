@@ -3,8 +3,6 @@ package org.dst.rpc;
 import org.dst.rpc.api.transport.Handler;
 import org.dst.rpc.api.transport.Server;
 import org.dst.rpc.core.URL;
-import org.dst.rpc.example.IServer;
-import org.dst.rpc.example.IServerImpl;
 import org.dst.rpc.netty.NettyTransportFactory;
 import org.dst.rpc.utils.NetUtils;
 

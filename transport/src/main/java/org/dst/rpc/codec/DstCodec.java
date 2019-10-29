@@ -1,11 +1,12 @@
 package org.dst.rpc.codec;
 
+import org.dst.rpc.api.async.DefaultResponse;
+import org.dst.rpc.api.async.Request;
+import org.dst.rpc.api.async.Response;
 import org.dst.rpc.common.constants.CodecConstants;
 import org.dst.rpc.exception.CodecException;
 import org.dst.rpc.common.constants.CodecConstants.DataType;
 import org.dst.rpc.common.constants.CodecConstants.Version;
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
 import org.dst.rpc.common.Void;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,7 +15,6 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import sun.reflect.misc.ReflectUtil;
 import org.dst.rpc.utils.ReflectUtils;
 
 /**
@@ -129,9 +129,9 @@ public class DstCodec implements Codec {
       output.writeUTF(response.getException().getClass().getName());
       output.writeObject(serialization.serialize(response.getException()));
       dataType = DataType.EXCEPTION;
-    } else if (response.getReturnValue() != null) {
-      output.writeUTF(response.getReturnValue().getClass().getName());
-      output.writeObject(serialization.serialize(response.getReturnValue()));
+    } else if (response.getValue() != null) {
+      output.writeUTF(response.getValue().getClass().getName());
+      output.writeObject(serialization.serialize(response.getValue()));
       dataType = DataType.RESPONSE;
     } else {
       dataType = DataType.VOID;
@@ -189,7 +189,7 @@ public class DstCodec implements Codec {
   private Object decodeResponse0(long requestId, byte[] content, boolean isException)
       throws Exception {
     ObjectInput input = new ObjectInputStream(new ByteArrayInputStream(content));
-    Response response = new Response();
+    Response response = new DefaultResponse();
 
     String className = input.readUTF();
     Class<?> clz = ReflectUtils.forName(className);
@@ -199,7 +199,7 @@ public class DstCodec implements Codec {
     if (isException) {
       response.setException((Exception) result);
     } else {
-      response.setReturnValue(result);
+      response.setValue(result);
     }
 
     input.close();

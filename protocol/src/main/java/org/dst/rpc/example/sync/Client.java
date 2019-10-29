@@ -1,11 +1,6 @@
-package org.dst.rpc.example;
+package org.dst.rpc.example.sync;
 
-import org.dst.rpc.DefaultInvoker;
-import org.dst.rpc.Invoker;
 import org.dst.rpc.Reference;
-import org.dst.rpc.core.URL;
-import org.dst.rpc.netty.NettyClient;
-import org.dst.rpc.proxy.ProxyFactory;
 
 /**
  * @author zrj CreateDate: 2019/10/28

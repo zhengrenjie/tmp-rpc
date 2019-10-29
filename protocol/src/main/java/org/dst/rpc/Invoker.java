@@ -1,8 +1,9 @@
 package org.dst.rpc;
 
 
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.api.async.Request;
+import org.dst.rpc.api.transport.Endpoint;
 import org.dst.rpc.core.URL;
 
 /**

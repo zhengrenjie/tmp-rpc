@@ -4,8 +4,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
+import org.dst.rpc.api.async.DefaultResponse;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.api.async.Request;
+import org.dst.rpc.api.transport.Endpoint;
 import org.dst.rpc.core.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.utils.ReflectUtils;
@@ -22,6 +24,8 @@ public class ServerImpl<T> implements Invoker<T> {
   private Class<T> interfaceClazz;
 
   private URL serverUrl;
+
+  private Endpoint endpoint;
 
   /**
    * 找到所有interfaceClazz可以调用的方法，并缓存下来，缓存名字要保留参数类型的完整名称，防止函数重载
@@ -52,7 +56,7 @@ public class ServerImpl<T> implements Invoker<T> {
 
   @Override
   public Response invoke(Request request) {
-    Response response = new Response();
+    Response response = new DefaultResponse();
     response.setRequestId(request.getRequestId());
     String methodName = ReflectUtils.getMethodDesc(request.getMethodName(), request.getArgsType());
     Method method = methodMap.get(methodName);
@@ -62,7 +66,13 @@ public class ServerImpl<T> implements Invoker<T> {
     }
     try {
       Object value =  method.invoke(ref, request.getArgsValue());
-      response.setReturnValue(value);
+      if(value instanceof Response) {
+        Response innerResponse = (Response) value;
+        response.setValue(innerResponse.getValue());
+        response.setException(innerResponse.getException());
+      } else {
+        response.setValue(value);
+      }
     } catch (Exception e) {
       response.setException(new DstException("ServerImpl: dst.exception when invoke method: " + methodName, e));
     } catch (Error e) {

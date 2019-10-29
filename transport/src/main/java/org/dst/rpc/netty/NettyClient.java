@@ -1,9 +1,11 @@
 package org.dst.rpc.netty;
 
-import org.dst.rpc.api.remote.DefaultResponseFuture;
-import org.dst.rpc.api.remote.Request;
-import org.dst.rpc.api.remote.Response;
-import org.dst.rpc.api.remote.ResponseFuture;
+import java.io.IOException;
+import org.dst.rpc.api.async.AsyncResponse;
+import org.dst.rpc.api.async.DefaultAsyncResponse;
+import org.dst.rpc.api.async.DefaultResponse;
+import org.dst.rpc.api.async.Response;
+import org.dst.rpc.api.async.Request;
 import org.dst.rpc.api.transport.AbstractChannel;
 import org.dst.rpc.api.transport.AbstractClient;
 import org.dst.rpc.api.transport.Channel;
@@ -50,6 +52,7 @@ public class NettyClient extends AbstractClient {
   @Override
   protected Channel createChannel() {
 
+    // fixme Endpoint的open close不能混进Channel中，Endpoint和Channel的生命周期不能混为一谈，否则像Server中含有多个Channel的情况下可能出问题。
     Channel channel = new AbstractChannel() {
       @Override
       protected void doOpen() {
@@ -127,14 +130,25 @@ public class NettyClient extends AbstractClient {
       @Override
       public void send(Object message) {
         byte[] msg = getChannel().getCodec().encode(message);
-        clientChannel.writeAndFlush(msg);
+        if (clientChannel.isActive()) {
+          clientChannel.writeAndFlush(msg);
+        } else {
+          throw new DstException("ClientChannel closed");
+        }
       }
 
       @Override
       public void receive(Object message) {
+        // 这里传过来的Response是DefaultResponse类型
         Response response = (Response) message;
-        ResponseFuture future = getResponseFuture(response.getRequestId());
-        future.onSuccess(response);
+        // 这一步转换一定不会出错
+        AsyncResponse future = (AsyncResponse) getResponseFuture(response.getRequestId());
+        // 使用setValue通知异步response成功
+        if(response.getException() != null) {
+          future.setException(response.getException());
+        } else {
+          future.setValue(response.getValue());
+        }
       }
     };
 
@@ -145,20 +159,22 @@ public class NettyClient extends AbstractClient {
 
   @Override
   public Response invoke(Request request) {
-    ResponseFuture response = new DefaultResponseFuture();
+    AsyncResponse response = new DefaultAsyncResponse(request.getRequestId());
     addCurrentTask(request.getRequestId(), response);
-    getChannel().send(request);
     try {
-      return (Response) response.getValue();
+      getChannel().send(request);
+      if(isAsync()) {
+        return response;
+      } else {
+        return response.get();
+      }
     } catch (Exception e) {
-      Response errorResponse = new Response();
+      Response errorResponse = new DefaultResponse();
       errorResponse.setRequestId(request.getRequestId());
       errorResponse.setException(new TransportException("NettyClient: response.getValue interrupted!"));
       return errorResponse;
     }
   }
-
-
 
   private class ClientChannelHandler extends ChannelDuplexHandler {
 
