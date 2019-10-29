@@ -21,7 +21,7 @@ public class HandlerDelegate implements Handler {
   }
 
   @Override
-  public Object handle(Endpoint endpoint, Object message) {
+  public Object handle(Object message) {
     return serverImpl.invoke((Request) message);
   }
 }
