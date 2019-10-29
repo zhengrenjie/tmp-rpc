@@ -26,8 +26,8 @@ abstract public class AbstractServer extends AbstractEndpoint implements Server 
     /*
       fixme 这是一个简单的线程池实现，不阻塞网络io线程，这里就是不阻塞netty的io线程，线程数应该要大一点，dubbo默认是200，这个参数需要从url读取
      */
-//    executor = Executors.newFixedThreadPool(GlobalConstants.threadNumber * 2);
-    executor = null;
+    executor = Executors.newFixedThreadPool(GlobalConstants.threadNumber * 2);
+//    executor = null;
   }
 
   @Override
