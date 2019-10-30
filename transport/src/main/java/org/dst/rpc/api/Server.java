@@ -1,4 +1,4 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api;
 
 import java.util.concurrent.Executor;
 

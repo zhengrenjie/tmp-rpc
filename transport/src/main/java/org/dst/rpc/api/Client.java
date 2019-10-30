@@ -1,4 +1,4 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api;
 
 import org.dst.rpc.api.async.Response;
 import org.dst.rpc.api.async.Request;

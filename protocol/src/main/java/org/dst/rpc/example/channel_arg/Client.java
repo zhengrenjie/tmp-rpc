@@ -1,8 +1,7 @@
 package org.dst.rpc.example.channel_arg;
 
 import org.dst.rpc.Reference;
-import org.dst.rpc.api.async.AsyncResponse;
-import org.dst.rpc.api.transport.Channel;
+import org.dst.rpc.api.Channel;
 
 /**
  * @author zrj CreateDate: 2019/10/28

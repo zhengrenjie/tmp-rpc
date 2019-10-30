@@ -1,4 +1,4 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api;
 
 import org.dst.rpc.api.async.Request;
 import org.dst.rpc.core.URL;
@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *

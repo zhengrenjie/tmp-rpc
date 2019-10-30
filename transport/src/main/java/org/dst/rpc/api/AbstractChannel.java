@@ -1,7 +1,5 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import org.dst.rpc.codec.Codec;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,4 +1,4 @@
-package org.dst.rpc.api.transport;
+package org.dst.rpc.api;
 
 import org.dst.rpc.core.URL;
 import java.util.List;
