@@ -3,7 +3,7 @@ package org.dst.rpc.netty;
 import org.dst.rpc.api.Handler;
 import org.dst.rpc.api.Server;
 import org.dst.rpc.api.ServerFactory;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 
 /**
  * NettyFactory实现

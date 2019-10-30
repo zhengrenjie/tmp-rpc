@@ -4,7 +4,7 @@ import org.dst.rpc.Invoker;
 import org.dst.rpc.api.async.AsyncResponse;
 import org.dst.rpc.api.async.Response;
 import org.dst.rpc.api.async.Request;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.utils.RequestIdGenerator;
 import java.lang.reflect.InvocationHandler;

@@ -1,6 +1,6 @@
 package org.dst.rpc.api;
 
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

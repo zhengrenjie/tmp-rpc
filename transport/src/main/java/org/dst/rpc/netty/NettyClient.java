@@ -11,7 +11,7 @@ import org.dst.rpc.api.Channel;
 import org.dst.rpc.api.Handler;
 import org.dst.rpc.codec.Codec;
 import org.dst.rpc.codec.FastJsonSerialization;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import org.dst.rpc.exception.DstException;
 import org.dst.rpc.exception.TransportException;
 import org.dst.rpc.netty.netty_codec.NettyDecoder;

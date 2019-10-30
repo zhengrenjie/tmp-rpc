@@ -4,7 +4,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.dst.rpc.common.constants.GlobalConstants;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 
 /**
  * 服务端

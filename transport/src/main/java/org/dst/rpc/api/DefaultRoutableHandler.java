@@ -1,7 +1,7 @@
 package org.dst.rpc.api;
 
 import org.dst.rpc.api.async.Request;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package org.dst.rpc.api;
 
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 
 /**
  * 表示一个网络连接终端。

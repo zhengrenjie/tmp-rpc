@@ -1,4 +1,4 @@
-package org.dst.rpc.core;
+package org.dst.rpc.common;
 
 import org.dst.rpc.common.constants.GlobalConstants;
 import org.dst.rpc.exception.DstException;

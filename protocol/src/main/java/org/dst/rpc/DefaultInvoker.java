@@ -2,7 +2,7 @@ package org.dst.rpc;
 
 import org.dst.rpc.api.async.Response;
 import org.dst.rpc.api.async.Request;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import org.dst.rpc.api.Client;
 
 /**

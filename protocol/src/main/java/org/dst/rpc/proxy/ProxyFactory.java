@@ -1,7 +1,7 @@
 package org.dst.rpc.proxy;
 
 import org.dst.rpc.Invoker;
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import java.lang.reflect.Proxy;
 
 

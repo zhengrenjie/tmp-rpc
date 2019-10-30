@@ -1,6 +1,6 @@
 package org.dst.rpc.api;
 
-import org.dst.rpc.core.URL;
+import org.dst.rpc.common.URL;
 import org.dst.rpc.exception.TransportException;
 import org.dst.rpc.model.IpPortPair;
 import java.util.Map;
